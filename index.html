@@ -91,11 +91,20 @@
       transform-origin: left;
       pointer-events: none;
     }
-    .header-cta { margin-left: 8px; min-height: 42px; display: inline-flex; align-items: center;
-      padding: 0 18px; color: #12141a; background: var(--yellow); border: 1px solid #fff0a3;
+    .header-cta { position: relative; isolation: isolate; overflow: hidden; margin-left: 8px; min-height: 42px; display: inline-flex; align-items: center;
+      padding: 0 46px 0 18px; color: #12141a; background: var(--yellow); border: 1px solid #fff0a3;
       box-shadow: 4px 4px 0 #612d1b; font-size: 13px; font-weight: 950; letter-spacing: .08em;
-      text-transform: uppercase; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease; }
-    .header-cta:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #612d1b; }
+      text-transform: uppercase; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, color .35s ease; }
+    .header-cta::before, .button.primary::before { content: ''; position: absolute; inset: 0; z-index: -1;
+      background: var(--orange); clip-path: circle(18px at calc(100% - 22px) 50%);
+      transition: clip-path .42s cubic-bezier(.78,.14,.15,.86); }
+    .header-cta::after, .button.primary::after { content: '\2192'; position: absolute; right: 16px; top: 50%;
+      translate: 0 -52%; font-size: 20px; line-height: 1; transition: translate .42s cubic-bezier(.78,.14,.15,.86); }
+    .header-cta:hover, .header-cta:focus-visible { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #612d1b; color: #fff; }
+    .header-cta:hover::before, .header-cta:focus-visible::before,
+    .button.primary:hover::before, .button.primary:focus-visible::before { clip-path: circle(160% at calc(100% - 22px) 50%); }
+    .header-cta:hover::after, .header-cta:focus-visible::after,
+    .button.primary:hover::after, .button.primary:focus-visible::after { translate: 5px -52%; }
     .nav-toggle { display: none; margin-left: auto; width: 44px; height: 44px; color: #fff;
       border: 1px solid var(--line); background: rgba(255,255,255,.05); font-size: 22px; cursor: pointer; }
 
@@ -118,13 +127,19 @@
       background: repeating-linear-gradient(-45deg, var(--yellow) 0 5px, transparent 5px 8px); }
     .hero h1 { max-width: 520px; margin: 14px 0 16px; font-size: clamp(2.2rem, 5vw, 4.8rem);
       line-height: .91; letter-spacing: -.045em; text-transform: uppercase; text-shadow: 0 5px 18px #000; }
+    .hero h1 .text-fill { display: block; color: rgba(255,255,255,.2); text-shadow: none;
+      background: linear-gradient(90deg, var(--yellow) 0%, var(--yellow) calc(var(--fill-progress, 0) * 100%),
+        rgba(255,255,255,.2) calc(var(--fill-progress, 0) * 100%), rgba(255,255,255,.2) 100%);
+      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .hero-copy { max-width: 540px; color: #d8e0e9; font: 500 18px/1.6 system-ui, sans-serif; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
     .button { min-height: 50px; display: inline-flex; align-items: center; justify-content: center;
       padding: 0 22px; border: 1px solid rgba(255,255,255,.28); color: #fff;
       background: rgba(10,21,35,.68); backdrop-filter: blur(12px); font-size: 14px; font-weight: 900;
       letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: .2s ease; }
-    .button.primary { color: #15171c; background: var(--yellow); border-color: #fff0a3; box-shadow: 5px 5px 0 #6c321c; }
+    .button.primary { position: relative; isolation: isolate; overflow: hidden; padding-right: 52px;
+      color: #15171c; background: var(--yellow); border-color: #fff0a3; box-shadow: 5px 5px 0 #6c321c; }
+    .button.primary:hover, .button.primary:focus-visible { color: #fff; }
     .button:hover { transform: translateY(-3px); border-color: var(--yellow); }
     .hero-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
     .stat { min-width: 116px; padding: 12px 15px; border: 1px solid var(--line); color: var(--muted);
@@ -221,6 +236,27 @@
     .magnet-target > a { transition: translate .2s ease, transform .2s ease; }
     .split-word { display: inline-block; }
 
+    .scroll-stack { position: relative; display: grid; gap: 0; }
+    .scroll-stack-row { min-height: 92svh; display: flex; align-items: flex-start; }
+    .scroll-stack-row + .scroll-stack-row { margin-top: -32svh; }
+    .scroll-stack-card { position: sticky; top: 112px; width: 100%; min-height: min(62svh, 560px);
+      display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(26px, 5vw, 72px); align-items: center;
+      padding: clamp(30px, 5vw, 64px); border: 1px solid var(--line); border-top: 6px solid var(--accent, var(--yellow));
+      border-radius: 26px; background: radial-gradient(circle at 86% 8%, var(--glow, rgba(255,211,79,.18)), transparent 46%),
+        rgba(8,17,29,.96); box-shadow: 0 34px 90px rgba(0,0,0,.42);
+      transform: scale(var(--stack-scale, 1)); opacity: var(--stack-opacity, 1);
+      transform-origin: center top; will-change: transform, opacity; }
+    .scroll-stack-row:nth-child(2) { --accent: var(--cyan); --glow: rgba(110,201,255,.18); }
+    .scroll-stack-row:nth-child(3) { --accent: var(--orange); --glow: rgba(242,122,49,.18); }
+    .stack-index { align-self: start; color: var(--accent, var(--yellow)); font-size: 12px; font-weight: 950;
+      letter-spacing: .18em; text-transform: uppercase; }
+    .stack-title { margin-top: 22px; font-size: clamp(2.6rem, 5.4vw, 5.5rem); line-height: .86; text-transform: uppercase; }
+    .stack-features { display: grid; gap: 18px; }
+    .stack-feature { padding: 24px 0; border-top: 1px solid rgba(255,255,255,.14); }
+    .stack-feature:last-child { border-bottom: 1px solid rgba(255,255,255,.14); }
+    .stack-feature strong { display: block; margin-bottom: 10px; color: #fff; font-size: 22px; text-transform: uppercase; }
+    .stack-feature p { color: var(--muted); font: 500 15px/1.65 system-ui, sans-serif; }
+
     .screenshots { position: relative; min-height: auto; background: #08111d; }
     .screenshots::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 8px;
       background: repeating-linear-gradient(-45deg, var(--yellow) 0 10px, #151b25 10px 20px); }
@@ -256,6 +292,7 @@
       position: absolute;
       top: 8px;
       right: 8px;
+      z-index: 3;
       width: 44px;
       height: 44px;
       border: 1px solid var(--line);
@@ -269,6 +306,7 @@
     .preview-arrow {
       position: absolute;
       top: 50%;
+      z-index: 3;
       transform: translateY(-50%);
       width: 44px;
       height: 44px;
@@ -280,6 +318,31 @@
     }
     .preview-arrow.previous { left: 8px; }
     .preview-arrow.next { right: 8px; }
+
+    .parallax-gallery { position: relative; }
+    .parallax-track { display: grid; grid-auto-flow: column; grid-auto-columns: min(72vw, 820px); gap: 18px;
+      overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory;
+      scrollbar-width: none; padding: 10px max(18px, calc((100% - min(72vw, 820px)) / 2)) 30px; }
+    .parallax-track::-webkit-scrollbar { display: none; }
+    .parallax-slide { position: relative; overflow: hidden; aspect-ratio: 16 / 9; scroll-snap-align: center; padding: 0;
+      border: 1px solid var(--line); border-radius: 22px; background: #040910; opacity: .48;
+      transform: scale(.9) rotate(var(--slide-rotation, 0deg)); transition: transform .45s cubic-bezier(.2,.7,.2,1), opacity .45s ease, border-color .3s ease;
+      cursor: zoom-in; box-shadow: 0 28px 80px rgba(0,0,0,.36); }
+    .parallax-slide:nth-child(odd) { --slide-rotation: -1.4deg; }
+    .parallax-slide:nth-child(even) { --slide-rotation: 1.4deg; }
+    .parallax-slide[data-active="true"] { opacity: 1; transform: scale(1) rotate(0); border-color: rgba(255,211,79,.55); }
+    .parallax-slide img { width: 112%; height: 112%; object-fit: cover; translate: var(--parallax-x, -5%) var(--parallax-y, -5%);
+      transition: translate .18s ease-out; }
+    .parallax-slide::after { content: attr(data-index); position: absolute; right: 16px; bottom: 16px;
+      display: grid; place-items: center; width: 42px; height: 42px; color: #11151b; background: var(--yellow);
+      font-size: 12px; font-weight: 950; letter-spacing: .08em; }
+    .gallery-controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; }
+    .gallery-arrow { width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%;
+      color: #fff; background: var(--panel); font-size: 26px; cursor: pointer; transition: .2s ease; }
+    .gallery-arrow:hover, .gallery-arrow:focus-visible { color: var(--ink); border-color: var(--yellow); background: var(--yellow); }
+    .gallery-status { min-width: 66px; color: var(--muted); font: 850 12px/1 system-ui, sans-serif;
+      letter-spacing: .14em; text-align: center; }
+    .pixel-transition { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
 
     .roadmap { min-height: auto; background: #08111d; }
     .roadmap-layout { display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(28px, 6vw, 76px); align-items: start; }
@@ -375,6 +438,10 @@
         min-height: 230px;
       }
       .roadmap .section-heading { position: static; }
+      .scroll-stack-row { min-height: 78svh; }
+      .scroll-stack-row + .scroll-stack-row { margin-top: -24svh; }
+      .scroll-stack-card { top: 92px; min-height: 56svh; grid-template-columns: 1fr; gap: 22px; }
+      .parallax-track { grid-auto-columns: min(84vw, 680px); padding-inline: max(14px, calc((100% - min(84vw, 680px)) / 2)); }
     }
 
     @media (max-width: 540px) {
@@ -392,6 +459,12 @@
       .roadmap-group summary { padding: 18px; font-size: 16px; }
       .roadmap-items { padding-inline: 18px; }
       .social-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .scroll-stack { gap: 14px; }
+      .scroll-stack-row, .scroll-stack-row + .scroll-stack-row { min-height: 0; margin-top: 0; }
+      .scroll-stack-card { position: relative; top: auto; min-height: 0; padding: 28px 22px; border-radius: 18px;
+        transform: none !important; opacity: 1 !important; }
+      .stack-title { font-size: 2.45rem; }
+      .parallax-track { grid-auto-columns: 88vw; padding-inline: max(14px, calc((100% - 88vw) / 2)); }
     }
 
     @media (min-width: 821px) and (max-height: 780px) {
@@ -410,6 +483,12 @@
       .site-nav a[aria-current="location"] { transform: none; }
       .feature-card::before { display: none; }
       .magnet-target > a { transition: none; }
+      .header-cta::before, .button.primary::before { transition: none; }
+      .hero h1 .text-fill { color: var(--yellow); background: none; -webkit-text-fill-color: currentColor; }
+      .scroll-stack { gap: 18px; }
+      .scroll-stack-row, .scroll-stack-row + .scroll-stack-row { min-height: 0; margin-top: 0; }
+      .scroll-stack-card { position: relative; top: auto; min-height: 0; transform: none !important; opacity: 1 !important; }
+      .parallax-slide, .parallax-slide img { transition: none; }
     }
   </style>
 </head>
@@ -443,7 +522,7 @@
       <div class="section-inner hero-layout">
         <div class="hero-content">
           <span class="eyebrow">Cross-platform prop hunt</span>
-          <h1>Hide as anything. Trust no object.</h1>
+          <h1 aria-label="Hide as anything. Trust no object.">Hide as anything.<span class="text-fill" data-text-fill aria-hidden="true">Trust no object.</span></h1>
           <p class="hero-copy">Play solo or with friends across mobile, PC, and console. Hunt the props—or become one—and survive a match built for up to 12 players.</p>
           <div class="hero-actions">
             <span class="magnet-target">
@@ -538,13 +617,34 @@
           <h2>Read the room.</h2>
           <p class="lede">The environment is your disguise, your danger and your best chance to outplay the other team.</p>
         </header>
-        <div class="feature-grid">
-          <article class="feature-card reveal"><span class="feature-number">01 / TRANSFORM</span><h3>Become the prop</h3><p>Stooges shoot at target objects to copy them, and can transform again while already in prop form.</p></article>
-          <article class="feature-card reveal"><span class="feature-number">02 / INVISIBILITY</span><h3>Disappear briefly</h3><p>Turn invisible for five seconds to break the chase. The skill needs time to refresh before it can be used again.</p></article>
-          <article class="feature-card reveal"><span class="feature-number">03 / TARGETS</span><h3>Look for green</h3><p>Not every item is targetable. Objects you can transform into are highlighted with a green light effect.</p></article>
-          <article class="feature-card reveal"><span class="feature-number">04 / BOOSTERS</span><h3>Grab an advantage</h3><p>Boosters spawn randomly around the map and grant different effects. A player can carry only one booster at a time.</p></article>
-          <article class="feature-card reveal"><span class="feature-number">05 / BOTS</span><h3>Fill the lobby</h3><p>Play solo with AI team-mates and opponents, then choose easy or hard bots to match the challenge you want.</p></article>
-          <article class="feature-card reveal"><span class="feature-number">06 / MAPS</span><h3>Change the hunt</h3><p>Choose between two visual themes and three map sizes to reshape routes, hiding spaces and match pressure.</p></article>
+        <div class="scroll-stack" aria-label="Gameplay mechanics">
+          <div class="scroll-stack-row">
+            <article class="scroll-stack-card">
+              <header><span class="stack-index">01 / Disguise</span><h3 class="stack-title">Become the room.</h3></header>
+              <div class="stack-features">
+                <div class="stack-feature"><strong>Transform</strong><p>Stooges shoot at target objects to copy them, and can transform again while already in prop form.</p></div>
+                <div class="stack-feature"><strong>Read the targets</strong><p>Not every item is targetable. Objects you can transform into are highlighted with a green light effect.</p></div>
+              </div>
+            </article>
+          </div>
+          <div class="scroll-stack-row">
+            <article class="scroll-stack-card">
+              <header><span class="stack-index">02 / Escape</span><h3 class="stack-title">Break the chase.</h3></header>
+              <div class="stack-features">
+                <div class="stack-feature"><strong>Disappear briefly</strong><p>Turn invisible for five seconds to lose the hunter. The skill needs time to refresh before it can be used again.</p></div>
+                <div class="stack-feature"><strong>Grab a booster</strong><p>Boosters spawn randomly around the map and grant different effects. A player can carry only one at a time.</p></div>
+              </div>
+            </article>
+          </div>
+          <div class="scroll-stack-row">
+            <article class="scroll-stack-card">
+              <header><span class="stack-index">03 / Replay</span><h3 class="stack-title">Change every hunt.</h3></header>
+              <div class="stack-features">
+                <div class="stack-feature"><strong>Fill the lobby</strong><p>Play solo with AI team-mates and opponents, then choose easy or hard bots to match the challenge you want.</p></div>
+                <div class="stack-feature"><strong>Learn new maps</strong><p>Choose between two visual themes and three map sizes to reshape routes, hiding spaces and match pressure.</p></div>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -556,16 +656,23 @@
           <span class="section-index">02 / Gallery</span>
           <h2>In-game screenshots.</h2>
         </header>
-        <div class="shot-grid reveal">
-          <button type="button" class="shot-card" data-index="01" aria-label="Preview prop hunt match">
+        <div class="parallax-gallery reveal">
+          <div class="parallax-track" tabindex="0" aria-label="Game screenshots. Scroll horizontally to browse.">
+          <button type="button" class="parallax-slide" data-index="01" aria-label="Preview booster pickup" data-active="true">
             <img src="assets/screenshots/booster-pickup.webp" width="1600" height="900" loading="lazy" decoding="async" alt="A DISGUYS player approaching a glowing booster during a match" />
           </button>
-          <button type="button" class="shot-card" data-index="02" aria-label="Preview booster pickup">
+          <button type="button" class="parallax-slide" data-index="02" aria-label="Preview facility chase">
             <img src="assets/screenshots/facility-chase.webp" width="1600" height="900" loading="lazy" decoding="async" alt="Multiple DISGUYS players moving through a dark industrial facility" />
           </button>
-          <button type="button" class="shot-card" data-index="03" aria-label="Preview facility chase">
+          <button type="button" class="parallax-slide" data-index="03" aria-label="Preview prop hunt match">
             <img src="assets/screenshots/prop-hunt-match.webp" width="1600" height="900" loading="lazy" decoding="async" alt="A DISGUYS prop hunt match inside a science-fiction map" />
           </button>
+          </div>
+          <div class="gallery-controls" aria-label="Gallery controls">
+            <button type="button" class="gallery-arrow previous" aria-label="Previous screenshot">‹</button>
+            <span class="gallery-status" aria-live="polite">01 / 03</span>
+            <button type="button" class="gallery-arrow next" aria-label="Next screenshot">›</button>
+          </div>
         </div>
       </div>
     </section>
@@ -608,7 +715,7 @@
     <a href="https://otilabdev.itch.io/disguys" target="_blank" rel="noopener" aria-label="itch.io">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.13 1.338C2.08 1.96.02 4.328 0 4.95v1.03c0 1.303 1.22 2.45 2.325 2.45 1.33 0 2.436-1.102 2.436-2.41 0 1.308 1.07 2.41 2.4 2.41 1.328 0 2.362-1.102 2.362-2.41 0 1.308 1.137 2.41 2.466 2.41h.024c1.33 0 2.466-1.102 2.466-2.41 0 1.308 1.034 2.41 2.363 2.41 1.33 0 2.4-1.102 2.4-2.41 0 1.308 1.106 2.41 2.435 2.41C22.78 8.43 24 7.282 24 5.98V4.95c-.02-.62-2.082-2.99-3.13-3.612-3.253-.114-5.508-.134-8.87-.133-3.362 0-7.945.053-8.87.133zm6.376 6.477a2.74 2.74 0 0 1-.468.602c-.5.49-1.19.795-1.947.795a2.786 2.786 0 0 1-1.95-.795c-.182-.178-.32-.37-.446-.59-.127.222-.303.412-.486.59a2.788 2.788 0 0 1-1.95.795c-.092 0-.187-.025-.264-.052-.107 1.113-.152 2.176-.168 2.95v.005l-.006 1.167c.02 2.334-.23 7.564 1.03 8.85 1.952.454 5.545.662 9.15.663 3.605 0 7.198-.21 9.15-.664 1.26-1.284 1.01-6.514 1.03-8.848l-.006-1.167v-.004c-.016-.775-.06-1.838-.168-2.95-.077.026-.172.052-.263.052a2.788 2.788 0 0 1-1.95-.795c-.184-.178-.36-.368-.486-.59-.127.22-.265.412-.447.59a2.786 2.786 0 0 1-1.95.794c-.76 0-1.446-.303-1.948-.793a2.74 2.74 0 0 1-.468-.602 2.738 2.738 0 0 1-.463.602 2.787 2.787 0 0 1-1.95.794h-.16a2.787 2.787 0 0 1-1.95-.793 2.738 2.738 0 0 1-.464-.602zm-2.004 2.59v.002c.795.002 1.5 0 2.373.953.687-.072 1.406-.108 2.125-.107.72 0 1.438.035 2.125.107.873-.953 1.578-.95 2.372-.953.376 0 1.876 0 2.92 2.934l1.123 4.028c.832 2.995-.266 3.068-1.636 3.07-2.03-.075-3.156-1.55-3.156-3.025-1.124.184-2.436.276-3.748.277-1.312 0-2.624-.093-3.748-.277 0 1.475-1.125 2.95-3.156 3.026-1.37-.004-2.468-.077-1.636-3.072l1.122-4.027c1.045-2.934 2.545-2.934 2.92-2.934zM12 12.714c-.002.002-2.14 1.964-2.523 2.662l1.4-.056v1.22c0 .056.56.033 1.123.007.562.026 1.124.05 1.124-.008v-1.22l1.4.055C14.138 14.677 12 12.713 12 12.713z"/></svg>
     </a>
-    <a href="https://www.instagram.com/otilabtech/" target="_blank" rel="noopener" aria-label="Instagram">
+    <a href="https://www.instagram.com/disguysoffical/" target="_blank" rel="noopener" aria-label="Instagram">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>
     </a>
     <a href="https://www.youtube.com/watch?v=v2zq0HVBxJA&amp;t=1s" target="_blank" rel="noopener" aria-label="YouTube">
@@ -706,9 +813,9 @@
 
       function savePreference(preference) {
         applyPreference(preference);
+        banner.hidden = true;
         try {
           localStorage.setItem(preferenceKey, preference);
-          banner.hidden = true;
         } catch (error) {
           console.error('Unable to save privacy preference.', error);
           status.textContent = 'Your choice applies to this page, but could not be saved.';
@@ -748,25 +855,122 @@
     <button type="button" class="preview-arrow next" aria-label="Next screenshot">›</button>
     <button type="button" class="preview-close" aria-label="Close preview">×</button>
     <img alt="" />
+    <canvas class="pixel-transition" aria-hidden="true"></canvas>
   </dialog>
 
   <script>
     const screenshotPreview = document.getElementById('screenshot-preview');
     const previewImage = screenshotPreview.querySelector('img');
-    const screenshots = [...document.querySelectorAll('.shot-card img')];
+    const pixelCanvas = screenshotPreview.querySelector('.pixel-transition');
+    const galleryTrack = document.querySelector('.parallax-track');
+    const gallerySlides = [...document.querySelectorAll('.parallax-slide')];
+    const galleryStatus = document.querySelector('.gallery-status');
+    const screenshots = gallerySlides.map((slide) => slide.querySelector('img'));
+    const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
     let screenshotIndex = 0;
+    let pixelFrame = 0;
 
-    function showScreenshot(index) {
+    function setPreviewImage(index) {
       screenshotIndex = (index + screenshots.length) % screenshots.length;
       previewImage.src = screenshots[screenshotIndex].src;
       previewImage.alt = screenshots[screenshotIndex].alt;
     }
 
-    document.querySelectorAll('.shot-card').forEach((button, index) => {
+    function drawContainedImage(context, image, width, height, ratio) {
+      const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
+      const drawWidth = image.naturalWidth * scale;
+      const drawHeight = image.naturalHeight * scale;
+      context.drawImage(image, (width - drawWidth) * .5 * ratio, (height - drawHeight) * .5 * ratio,
+        drawWidth * ratio, drawHeight * ratio);
+    }
+
+    function showScreenshot(index, animate = true) {
+      const nextIndex = (index + screenshots.length) % screenshots.length;
+      if (!animate || reducedMotionQuery.matches || !screenshotPreview.open || !previewImage.complete) {
+        setPreviewImage(nextIndex);
+        return;
+      }
+
+      cancelAnimationFrame(pixelFrame);
+      const bounds = screenshotPreview.getBoundingClientRect();
+      const ratio = Math.min(devicePixelRatio, 2);
+      pixelCanvas.width = Math.max(1, Math.round(bounds.width * ratio));
+      pixelCanvas.height = Math.max(1, Math.round(bounds.height * ratio));
+      const context = pixelCanvas.getContext('2d');
+      context.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+      drawContainedImage(context, previewImage, bounds.width, bounds.height, ratio);
+      setPreviewImage(nextIndex);
+
+      const cellSize = 34;
+      const cells = [];
+      for (let y = 0; y < bounds.height; y += cellSize) {
+        for (let x = 0; x < bounds.width; x += cellSize) cells.push({ x, y });
+      }
+      for (let index = cells.length - 1; index > 0; index -= 1) {
+        const swap = Math.floor(Math.random() * (index + 1));
+        [cells[index], cells[swap]] = [cells[swap], cells[index]];
+      }
+
+      const startedAt = performance.now();
+      function dissolve(now) {
+        const progress = Math.min(1, (now - startedAt) / 520);
+        const visibleCells = Math.ceil(cells.length * progress);
+        for (let index = 0; index < visibleCells; index += 1) {
+          const cell = cells[index];
+          context.clearRect(cell.x * ratio, cell.y * ratio, (cellSize + 1) * ratio, (cellSize + 1) * ratio);
+        }
+        if (progress < 1) pixelFrame = requestAnimationFrame(dissolve);
+        else context.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+      }
+      pixelFrame = requestAnimationFrame(dissolve);
+    }
+
+    function setGalleryActive(index, shouldScroll = false) {
+      screenshotIndex = (index + gallerySlides.length) % gallerySlides.length;
+      gallerySlides.forEach((slide, slideIndex) => {
+        slide.dataset.active = String(slideIndex === screenshotIndex);
+      });
+      galleryStatus.textContent = `${String(screenshotIndex + 1).padStart(2, '0')} / ${String(gallerySlides.length).padStart(2, '0')}`;
+      if (!shouldScroll) return;
+      const slide = gallerySlides[screenshotIndex];
+      const left = slide.offsetLeft - (galleryTrack.clientWidth - slide.clientWidth) / 2;
+      galleryTrack.scrollTo({ left, behavior: reducedMotionQuery.matches ? 'auto' : 'smooth' });
+      slide.focus({ preventScroll: true });
+    }
+
+    const galleryObserver = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      setGalleryActive(gallerySlides.indexOf(visible.target));
+    }, { root: galleryTrack, threshold: [.55, .7, .85] });
+
+    gallerySlides.forEach((button, index) => {
+      galleryObserver.observe(button);
       button.addEventListener('click', () => {
-        showScreenshot(index);
+        setPreviewImage(index);
         screenshotPreview.showModal();
       });
+      button.addEventListener('pointermove', (event) => {
+        if (reducedMotionQuery.matches || button.dataset.active !== 'true') return;
+        const bounds = button.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width - .5) * -4 - 5;
+        const y = ((event.clientY - bounds.top) / bounds.height - .5) * -4 - 5;
+        button.style.setProperty('--parallax-x', `${x}%`);
+        button.style.setProperty('--parallax-y', `${y}%`);
+      });
+      button.addEventListener('pointerleave', () => {
+        button.style.removeProperty('--parallax-x');
+        button.style.removeProperty('--parallax-y');
+      });
+    });
+
+    document.querySelector('.gallery-arrow.previous').addEventListener('click', () => setGalleryActive(screenshotIndex - 1, true));
+    document.querySelector('.gallery-arrow.next').addEventListener('click', () => setGalleryActive(screenshotIndex + 1, true));
+    galleryTrack.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      setGalleryActive(screenshotIndex + (event.key === 'ArrowRight' ? 1 : -1), true);
     });
 
     screenshotPreview.querySelector('.preview-arrow.previous').addEventListener('click', () => {
@@ -791,6 +995,53 @@
     screenshotPreview.addEventListener('click', (event) => {
       if (event.target === screenshotPreview) screenshotPreview.close();
     });
+    screenshotPreview.addEventListener('close', () => {
+      cancelAnimationFrame(pixelFrame);
+      pixelCanvas.getContext('2d').clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+    });
+    setGalleryActive(0);
+  </script>
+
+  <script>
+    (() => {
+      const textFill = document.querySelector('[data-text-fill]');
+      const stackRows = [...document.querySelectorAll('.scroll-stack-row')];
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      let scheduled = false;
+
+      function updateScrollEffects() {
+        scheduled = false;
+        if (reducedMotion.matches) {
+          textFill.style.setProperty('--fill-progress', 1);
+          stackRows.forEach((row) => {
+            row.style.removeProperty('--stack-scale');
+            row.style.removeProperty('--stack-opacity');
+          });
+          return;
+        }
+
+        const fillProgress = Math.min(1, Math.max(0, scrollY / (innerHeight * .55)));
+        textFill.style.setProperty('--fill-progress', fillProgress.toFixed(3));
+
+        stackRows.slice(0, -1).forEach((row, index) => {
+          const nextBounds = stackRows[index + 1].getBoundingClientRect();
+          const progress = Math.min(1, Math.max(0, (innerHeight * .72 - nextBounds.top) / (innerHeight * .48)));
+          row.style.setProperty('--stack-scale', (1 - progress * .055).toFixed(3));
+          row.style.setProperty('--stack-opacity', (1 - progress * .5).toFixed(3));
+        });
+      }
+
+      function scheduleScrollEffects() {
+        if (scheduled) return;
+        scheduled = true;
+        requestAnimationFrame(updateScrollEffects);
+      }
+
+      addEventListener('scroll', scheduleScrollEffects, { passive: true });
+      addEventListener('resize', scheduleScrollEffects);
+      reducedMotion.addEventListener('change', scheduleScrollEffects);
+      updateScrollEffects();
+    })();
   </script>
 
   <script>
@@ -1018,6 +1269,15 @@
       hopHeight: 0.12,
       navigationStep: 4,
     };
+    const CAMERA_CHAPTERS = [
+      { id: 'top', offset: [0, 0, 0], rotation: [0, 0, 0] },
+      { id: 'about', offset: [0.34, 0.08, 0.24], rotation: [-0.5, 1.4, 0] },
+      { id: 'about-overview', offset: [-0.46, 0.12, 0.42], rotation: [0.4, -1.6, 0] },
+      { id: 'gameplay', offset: [0.4, 0.06, 0.28], rotation: [-0.2, 1.8, 0] },
+      { id: 'screenshots', offset: [-0.3, -0.05, 0.5], rotation: [0.5, -1.4, 0] },
+      { id: 'roadmap', offset: [0.22, 0.1, 0.38], rotation: [-0.3, 1.1, 0] },
+      { id: 'social', offset: [0, 0, 0.58], rotation: [0, 0, 0] },
+    ];
     // ---------- Lighting ----------
     // The exported directional lights sit far out, where the scene's own origin is. Direction is
     // all a directional light needs, so they get pulled in to where a shadow camera can work.
@@ -1370,6 +1630,58 @@
 
       let camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.3, 1000);
       const camBase = { pos: new THREE.Vector3(), quat: new THREE.Quaternion(), fov: 60 };
+      const storyPosition = new THREE.Vector3();
+      const storyQuaternion = new THREE.Quaternion();
+      const storyTargetPosition = new THREE.Vector3();
+      const storyTargetQuaternion = new THREE.Quaternion();
+      const storyLocalOffset = new THREE.Vector3();
+      const storyToOffset = new THREE.Vector3();
+      const storyLocalRotation = new THREE.Quaternion();
+      const storyEuler = new THREE.Euler();
+      const cameraChapters = CAMERA_CHAPTERS.map((chapter) => ({
+        ...chapter,
+        element: document.getElementById(chapter.id),
+      }));
+      let cameraStoryReady = false;
+
+      function updateStoryCamera(dt) {
+        if (!cameraStoryReady) return;
+        let from = cameraChapters[0];
+        let to = from;
+        let progress = 0;
+
+        if (!prefersReducedMotion) {
+          const anchor = scrollY + innerHeight * .46;
+          for (let index = 0; index < cameraChapters.length - 1; index += 1) {
+            const current = cameraChapters[index];
+            const next = cameraChapters[index + 1];
+            if (anchor < next.element.offsetTop) {
+              from = current;
+              to = next;
+              const span = Math.max(1, next.element.offsetTop - current.element.offsetTop);
+              const linear = Math.min(1, Math.max(0, (anchor - current.element.offsetTop) / span));
+              progress = linear * linear * (3 - 2 * linear);
+              break;
+            }
+            from = next;
+            to = next;
+          }
+        }
+
+        storyLocalOffset.fromArray(from.offset).lerp(storyToOffset.fromArray(to.offset), progress);
+        storyTargetPosition.copy(storyLocalOffset).applyQuaternion(camBase.quat).add(camBase.pos);
+
+        const rotation = from.rotation.map((value, index) => THREE.MathUtils.lerp(value, to.rotation[index], progress));
+        storyEuler.set(...rotation.map((value) => THREE.MathUtils.degToRad(value)));
+        storyLocalRotation.setFromEuler(storyEuler);
+        storyTargetQuaternion.copy(camBase.quat).multiply(storyLocalRotation);
+
+        const ease = 1 - Math.exp(-dt * 4.5);
+        storyPosition.lerp(storyTargetPosition, ease);
+        storyQuaternion.slerp(storyTargetQuaternion, ease);
+        camera.position.copy(storyPosition);
+        camera.quaternion.copy(storyQuaternion);
+      }
 
       // A composer renders into its own targets, so two things the renderer would normally handle
       // stop applying. Its antialias flag is ignored, because that only covers the default
@@ -1901,8 +2213,31 @@
 
       function setupPropRunners(stage) {
         const graph = buildRunnerNavigation(stage);
-        const barrelSources = propsRoot.children.filter((object) => /^Barrel_(?:1B|2A)/i.test(object.name));
-        if (barrelSources.length === 0) throw new Error('prop runners require barrel models');
+        const actorProfiles = [
+          {
+            label: 'Cone', pattern: /^Cone$/i, speedScale: 1.15, cadence: 1.2,
+            hopScale: 1.3, pitch: 0.035, roll: 0.02, squash: 0.05,
+          },
+          {
+            label: 'Box', pattern: /^Box_Large/i, speedScale: 0.76, cadence: 0.75,
+            hopScale: 0.35, pitch: 0.02, roll: 0.09, squash: 0.018,
+          },
+          {
+            label: 'Pack', pattern: /^Pack_(?:1C|2B)/i, speedScale: 1, cadence: 1.45,
+            hopScale: 0.8, pitch: 0.07, roll: 0.04, squash: 0.065,
+          },
+        ];
+        if (actorProfiles.length !== PROP_RUNNERS.count) {
+          throw new Error('prop runner profile count must match the configured runner count');
+        }
+        const actorSources = actorProfiles.map((profile) => {
+          const candidates = propsRoot.children.filter((object) => profile.pattern.test(object.name));
+          if (candidates.length === 0) throw new Error(`prop runners require a ${profile.label} model`);
+          return {
+            profile,
+            source: candidates[Math.floor(Math.random() * candidates.length)],
+          };
+        });
 
         const claims = new Map();
         const runners = [];
@@ -1912,8 +2247,8 @@
         const direction = new THREE.Vector3();
         const heading = new THREE.Quaternion();
         const lean = new THREE.Quaternion();
+        const motionEuler = new THREE.Euler();
         const up = new THREE.Vector3(0, 1, 0);
-        const forward = new THREE.Vector3(1, 0, 0);
 
         const placeRunner = (runner, position, hop = 0) => {
           localPosition.copy(position);
@@ -1923,11 +2258,11 @@
         };
 
         for (let index = 0; index < PROP_RUNNERS.count; index++) {
-          const source = barrelSources[index % barrelSources.length];
+          const { profile, source } = actorSources[index];
           source.getWorldPosition(worldPosition);
           const sourceBounds = new THREE.Box3().setFromObject(source);
           const object = source.clone(true);
-          object.name = `Runner Barrel ${index + 1}`;
+          object.name = `Environment Actor ${profile.label}`;
           stage.add(object);
           const current = spawnNodes[index];
           const runner = {
@@ -1938,13 +2273,15 @@
             path: [current],
             moving: false,
             progress: 0,
-            speed: THREE.MathUtils.lerp(PROP_RUNNERS.speedMin, PROP_RUNNERS.speedMax, Math.random()),
+            speed: THREE.MathUtils.lerp(PROP_RUNNERS.speedMin, PROP_RUNNERS.speedMax, Math.random())
+              * profile.speedScale,
             retryAfter: Math.random() * 0.4,
             floorOffset: worldPosition.y - sourceBounds.min.y,
             baseQuaternion: object.quaternion.clone(),
             facingQuaternion: new THREE.Quaternion(),
             baseScale: object.scale.clone(),
             phase: Math.random() * Math.PI * 2,
+            profile,
           };
           claims.set(current, runner);
           placeRunner(runner, graph.nodes[current].position);
@@ -1995,7 +2332,7 @@
               const remaining = (1 - runner.progress) * distance;
               const movement = Math.min(travel, remaining);
               travel -= movement;
-              runner.phase += movement * Math.PI;
+              runner.phase += movement * Math.PI * runner.profile.cadence;
               direction.subVectors(end, start).normalize();
 
               if (movement < remaining) {
@@ -2014,14 +2351,23 @@
             }
 
             const stride = Math.sin(runner.phase);
-            placeRunner(runner, worldPosition, Math.abs(stride) * PROP_RUNNERS.hopHeight);
+            placeRunner(
+              runner,
+              worldPosition,
+              Math.abs(stride) * PROP_RUNNERS.hopHeight * runner.profile.hopScale,
+            );
 
             heading.setFromAxisAngle(up, Math.atan2(direction.x, direction.z));
             runner.facingQuaternion.rotateTowards(heading, PROP_RUNNERS.turnSpeed * dt);
-            lean.setFromAxisAngle(forward, stride * 0.055);
+            motionEuler.set(
+              stride * runner.profile.pitch,
+              0,
+              Math.cos(runner.phase) * runner.profile.roll,
+            );
+            lean.setFromEuler(motionEuler);
             runner.object.quaternion.copy(runner.facingQuaternion)
               .multiply(runner.baseQuaternion).multiply(lean);
-            const squash = Math.abs(stride) * 0.035;
+            const squash = Math.abs(stride) * runner.profile.squash;
             runner.object.scale.set(
               runner.baseScale.x * (1 + squash),
               runner.baseScale.y * (1 - squash),
@@ -2061,6 +2407,11 @@
           camBase.fov = srcCam.fov;
           camera.near = srcCam.near;
           camera.far = srcCam.far;
+          storyPosition.copy(camBase.pos);
+          storyQuaternion.copy(camBase.quat);
+          camera.position.copy(camBase.pos);
+          camera.quaternion.copy(camBase.quat);
+          cameraStoryReady = true;
 
           const lights = [];
           sceneGltf.scene.traverse((c) => { if (c.isDirectionalLight) lights.push(c); });
@@ -2099,8 +2450,7 @@
         dust.geo.attributes.position.needsUpdate = true;
 
         t += dt * DRIFT_SPEED;
-        camera.quaternion.copy(camBase.quat);
-        camera.position.copy(camBase.pos);
+        updateStoryCamera(dt);
         camera.translateX(Math.sin(t) * DRIFT_X);
         camera.translateY(Math.sin(t * 2) * DRIFT_Y);
 
