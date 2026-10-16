@@ -51,8 +51,7 @@
     html, body { height: auto; min-height: 100%; overflow-x: hidden; overflow-y: auto; }
     body { background: var(--ink); font-family: "Arial Narrow", "Roboto Condensed", Impact, system-ui, sans-serif; }
     body::after { content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(90deg, rgba(4,9,16,.48), transparent 42%, rgba(4,9,16,.16)),
-        linear-gradient(180deg, rgba(4,9,16,.28), transparent 45%, rgba(4,9,16,.5)); }
+      background: rgba(4,9,16,.58); }
     #intro { z-index: 0; }
     #loading {
       inset: auto 16px 16px auto;
@@ -113,9 +112,6 @@
     .section > * { pointer-events: auto; }
     .section-inner { width: var(--content); margin: 0 auto; }
     .hero { position: relative; min-height: 100svh; align-items: flex-end; padding-bottom: 9vh; }
-    .hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
-      background: linear-gradient(90deg, rgba(5,12,21,.75) 0%, rgba(5,12,21,.18) 52%, transparent 76%),
-        linear-gradient(0deg, rgba(5,12,21,.75), transparent 48%); }
     .hero-layout { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; gap: 36px; align-items: end; }
     .hero-content { position: relative; width: min(590px, 100%); }
     .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--yellow);
@@ -186,10 +182,10 @@
     .store-card[href]:hover { background: #ffe181; }
     .store-card[href]:focus-visible { outline: 3px solid #fff; outline-offset: 5px; }
 
-    .content-section { position: relative; background: linear-gradient(90deg, rgba(7,15,26,.96) 0 55%, rgba(7,15,26,.56)); }
+    .content-section { position: relative; }
     .content-section::before, .roadmap::before { content: ''; position: absolute; left: 0; right: 0; top: 0;
       height: 8px; background: repeating-linear-gradient(-45deg, var(--yellow) 0 10px, #151b25 10px 20px); }
-    .gameplay-video { min-height: auto; background: #08111d; }
+    .gameplay-video { min-height: auto; }
     .video-frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--line);
       background: #03070d; box-shadow: 0 28px 80px rgba(0,0,0,.38); }
     .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
@@ -235,7 +231,6 @@
     .team-rule { display: inline-block; margin-top: 30px; padding: 10px 12px; color: #10151d;
       background: var(--yellow); font-size: 12px; font-weight: 950; letter-spacing: .09em; text-transform: uppercase; }
 
-    .gameplay { background: rgba(6,13,23,.86); }
     .feature-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; }
     .feature-card { grid-column: span 3; border-radius: 16px; min-height: 230px; padding: 26px;
       transition: transform .2s ease, border-color .2s ease; }
@@ -294,7 +289,7 @@
     .stack-feature strong { display: block; margin-bottom: 10px; color: #fff; font-size: 22px; text-transform: uppercase; }
     .stack-feature p { color: var(--muted); font: 500 15px/1.65 system-ui, sans-serif; }
 
-    .screenshots { position: relative; min-height: auto; background: #08111d; }
+    .screenshots { position: relative; min-height: auto; }
     .screenshots::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 8px;
       background: repeating-linear-gradient(-45deg, var(--yellow) 0 10px, #151b25 10px 20px); }
     .shot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -381,7 +376,7 @@
       letter-spacing: .14em; text-align: center; }
     .pixel-transition { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
 
-    .roadmap { min-height: auto; background: #08111d; }
+    .roadmap { min-height: auto; }
     .roadmap-layout { display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(28px, 6vw, 76px); align-items: start; }
     .roadmap .section-heading { position: sticky; top: 112px; }
     .roadmap-list { display: grid; gap: 12px; }
@@ -402,7 +397,7 @@
       color: var(--yellow); font: 850 11px/1 system-ui, sans-serif; letter-spacing: .08em; }
     .roadmap-items strong { color: #fff; }
 
-    .social-section { min-height: 78svh; background: linear-gradient(145deg, #0c1726, #050b13); }
+    .social-section { min-height: 78svh; }
     .social-section .section-heading { max-width: 780px; }
     .social-section .section-heading p { max-width: 680px; margin-top: 18px; color: var(--muted);
       font: 500 clamp(1rem, 1.8vw, 1.2rem)/1.65 system-ui, sans-serif; }
@@ -419,7 +414,7 @@
       background: var(--yellow); transform: translateY(-5px); outline: none; }
     .social-grid .soon { color: #697585; background: rgba(255,255,255,.018); cursor: default; }
     #site-footer { position: relative; z-index: 3; min-height: 150px; display: grid; place-items: center;
-      padding: 36px 24px; border-top: 1px solid var(--line); background: #03070d; }
+      padding: 36px 24px; border-top: 1px solid var(--line); }
     #site-footer img { display: block; width: 96px; height: auto; opacity: .72; filter: grayscale(1); }
     #site-footer { gap: 16px; color: var(--muted); text-align: center; font-size: 14px; }
     #site-footer a { color: var(--yellow); text-underline-offset: 4px; }
@@ -465,7 +460,6 @@
       .nav-toggle { display: block; }
       .section { padding: 100px 0 80px; }
       .hero { padding-bottom: 8vh; }
-      .hero::before { background: linear-gradient(0deg, rgba(5,12,21,.88), rgba(5,12,21,.08) 85%); }
       .hero-layout { grid-template-columns: 1fr; gap: 10px; }
       .about-grid, .team-grid, .roadmap-layout { grid-template-columns: 1fr; }
       .feature-grid { grid-template-columns: 1fr 1fr; }
@@ -845,6 +839,9 @@
       Cookie settings removes the embedded player. Cookies or storage already
       created by third-party services must be managed through your browser settings.</p>
     </details>
+    <a class="button" id="account-deletion" href="account-deletion.html">
+      Delete your Disguys account
+    </a>
   </footer>
 
   <aside id="cookie-banner" aria-labelledby="cookie-title" hidden>
